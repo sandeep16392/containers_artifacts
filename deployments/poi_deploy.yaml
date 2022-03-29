@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: poi-service
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: poi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poi-deployment
+  labels:
+    app: poi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poi
+  template:
+    metadata:
+      labels:
+        app: poi
+    spec:
+      containers:
+      - name: poi
+        image: registryycc0983.azurecr.io/team-2/poi:1.5
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        envFrom:
+        - secretRef:
+            name: mysecret
