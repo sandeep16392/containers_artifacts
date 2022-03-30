@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tripviewer-service
+  namespace: web
 spec:
   type: LoadBalancer
   ports:
@@ -15,6 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tripviewer-deployment
+  namespace: web
   labels:
     app: tripviewer
 spec:
@@ -37,9 +39,9 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: Production
         - name: TRIPS_API_ENDPOINT
-          value: "http://trips-service"
+          value: "http://trips-service.api"
         - name: USERPROFILE_API_ENDPOINT
-          value: "http://userprofile-service"
+          value: "http://userprofile-service.api"
         envFrom:
         - secretRef:
             name: mysecret
